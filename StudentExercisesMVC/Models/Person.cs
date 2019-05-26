@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace StudentExercisesAPI.Models
+namespace StudentExercisesMVC.Models
 {
     public class Person
     {
@@ -20,8 +20,9 @@ namespace StudentExercisesAPI.Models
         [Display(Name = "Slack Handle")]
         public string SlackHandle { get; set; }
 
-        [Display(Name = "CohortId")]
-        public int? CohortId { get; set; }
+        [Required]
+        [Display(Name = "Cohort Id")]
+        public int CohortId { get; set; }
 
        
         public Cohort CurrentCohort { get; set; }

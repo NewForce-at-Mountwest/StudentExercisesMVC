@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using StudentExercisesAPI.Models;
+using StudentExercisesMVC.Models;
+using StudentExercisesMVC.Models.ViewModels;
+
+
+
 
 namespace StudentExercisesMVC.Controllers
 {
@@ -104,23 +108,33 @@ namespace StudentExercisesMVC.Controllers
         // GET: Students/Create
         public ActionResult Create()
         {
-            return View();
+            CreateStudentViewModel studentViewModel = new CreateStudentViewModel(_config.GetConnectionString("DefaultConnection"));
+            return View(studentViewModel);
         }
 
         // POST: Students/Create
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(CreateStudentViewModel model)
         {
-            try
+            using (SqlConnection conn = Connection)
             {
-                // TODO: Add insert logic here
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO Student
+                ( FirstName, LastName, SlackHandle, CohortId )
+                VALUES
+                ( @firstName, @lastName, @slackHandle, @cohortId )";
+                    cmd.Parameters.Add(new SqlParameter("@firstName", model.student.FirstName));
+                    cmd.Parameters.Add(new SqlParameter("@lastName", model.student.LastName));
+                    cmd.Parameters.Add(new SqlParameter("@slackHandle", model.student.SlackHandle));
+                    cmd.Parameters.Add(new SqlParameter("@cohortId", model.student.CohortId));
+                    cmd.ExecuteNonQuery();
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
+                    return RedirectToAction(nameof(Index));
+                }
             }
         }
 
@@ -168,11 +182,11 @@ namespace StudentExercisesMVC.Controllers
         {
             try
             {
-                    using (SqlConnection conn = Connection)
+                using (SqlConnection conn = Connection)
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
                     {
-                        conn.Open();
-                        using (SqlCommand cmd = conn.CreateCommand())
-                        {
                         cmd.CommandText = @"UPDATE Student
                                             SET firstName=@firstName, 
                                             lastName=@lastName, 
@@ -188,8 +202,8 @@ namespace StudentExercisesMVC.Controllers
                         int rowsAffected = cmd.ExecuteNonQuery();
 
                     }
-                    }
-               
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -251,7 +265,7 @@ namespace StudentExercisesMVC.Controllers
                         cmd.Parameters.Add(new SqlParameter("@id", id));
 
                         int rowsAffected = cmd.ExecuteNonQuery();
-                      
+
                     }
                 }
 

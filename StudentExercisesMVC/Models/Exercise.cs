@@ -8,7 +8,7 @@ Language of exercise (JavaScript, Python, CSharp, etc.) */
 using System;
 using System.Collections.Generic;
 
-namespace StudentExercisesAPI.Models{
+namespace StudentExercisesMVC.Models{
     public class Exercise{
         public int id {get; set;}
 

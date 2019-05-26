@@ -10,7 +10,7 @@ A method to assign an exercise to a student
 
 using System;
 
-namespace StudentExercisesAPI.Models
+namespace StudentExercisesMVC.Models
 {
     public class Instructor : Person
     {
