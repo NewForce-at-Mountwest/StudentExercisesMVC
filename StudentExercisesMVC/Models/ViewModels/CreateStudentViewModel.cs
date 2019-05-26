@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using StudentExercisesMVC.Models;
+using StudentExercisesMVC.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -16,23 +17,13 @@ namespace StudentExercisesMVC.Models.ViewModels
         public List<SelectListItem> Cohorts { get; set; }
         public Student student { get; set; }
 
-        private string _connectionString;
+      
 
-        private SqlConnection Connection
+        public CreateStudentViewModel()
         {
-            get
-            {
-                return new SqlConnection(_connectionString);
-            }
-        }
+        
 
-        public CreateStudentViewModel() { }
-
-        public CreateStudentViewModel(string connectionString)
-        {
-            _connectionString = connectionString;
-
-            Cohorts = GetAllCohorts()
+            Cohorts = CohortRepository.GetAllCohorts()
                 .Select(cohort => new SelectListItem()
                 {
                     Text = cohort.name,
@@ -49,31 +40,6 @@ namespace StudentExercisesMVC.Models.ViewModels
 
         }
 
-        private List<Cohort> GetAllCohorts()
-        {
-            using (SqlConnection conn = Connection)
-            {
-                conn.Open();
-                using (SqlCommand cmd = conn.CreateCommand())
-                {
-                    cmd.CommandText = "SELECT Id, Name FROM Cohort";
-                    SqlDataReader reader = cmd.ExecuteReader();
-
-                    List<Cohort> cohorts = new List<Cohort>();
-                    while (reader.Read())
-                    {
-                        cohorts.Add(new Cohort
-                        {
-                            id = reader.GetInt32(reader.GetOrdinal("Id")),
-                            name = reader.GetString(reader.GetOrdinal("Name")),
-                        });
-                    }
-
-                    reader.Close();
-
-                    return cohorts;
-                }
-            }
-        }
+       
     }
 }
