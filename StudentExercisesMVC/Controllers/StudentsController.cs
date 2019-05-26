@@ -141,38 +141,8 @@ namespace StudentExercisesMVC.Controllers
         // GET: Students/Edit/5
         public ActionResult Edit(int id)
         {
-            using (SqlConnection conn = Connection)
-            {
-                conn.Open();
-                using (SqlCommand cmd = conn.CreateCommand())
-                {
-                    cmd.CommandText = @"
-                        SELECT
-                            Id, firstName, lastName, slackHandle, cohortId
-                        FROM Student
-                        WHERE Id = @id";
-                    cmd.Parameters.Add(new SqlParameter("@id", id));
-                    SqlDataReader reader = cmd.ExecuteReader();
-
-                    Student Student = null;
-
-                    if (reader.Read())
-                    {
-                        Student = new Student
-                        {
-                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                            FirstName = reader.GetString(reader.GetOrdinal("firstName")),
-                            LastName = reader.GetString(reader.GetOrdinal("lastName")),
-                            SlackHandle = reader.GetString(reader.GetOrdinal("slackHandle")),
-                            CohortId = reader.GetInt32(reader.GetOrdinal("cohortId"))
-
-                        };
-                    }
-                    reader.Close();
-
-                    return View(Student);
-                }
-            }
+            EditStudentViewModel viewModel = new EditStudentViewModel(id, _config.GetConnectionString("DefaultConnection"));
+            return View(viewModel);
         }
 
         // POST: Students/Edit/5

@@ -16,9 +16,9 @@ namespace StudentExercisesMVC.Models.ViewModels
         public List<SelectListItem> Cohorts { get; set; }
         public Student student { get; set; }
 
-        protected string _connectionString;
+        private string _connectionString;
 
-        protected SqlConnection Connection
+        private SqlConnection Connection
         {
             get
             {
@@ -49,7 +49,7 @@ namespace StudentExercisesMVC.Models.ViewModels
 
         }
 
-        protected List<Cohort> GetAllCohorts()
+        private List<Cohort> GetAllCohorts()
         {
             using (SqlConnection conn = Connection)
             {
