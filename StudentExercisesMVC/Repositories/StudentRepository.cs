@@ -35,12 +35,11 @@ namespace StudentExercisesMVC.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                     SELECT s.Id,
-                     s.FirstName,
-                    s.LastName,
-                    s.SlackHandle,
-                    s.CohortId
-                    FROM Student s";
+                        SELECT
+                            s.Id, s.firstName, s.lastName, s.slackHandle, s.cohortId,
+                            c.Name AS 'Cohort Name'
+                        FROM Student s
+                        JOIN Cohort c ON s.CohortId = c.Id";
                     SqlDataReader reader = cmd.ExecuteReader();
 
                     List<Student> students = new List<Student>();
@@ -52,7 +51,11 @@ namespace StudentExercisesMVC.Repositories
                             FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
                             LastName = reader.GetString(reader.GetOrdinal("LastName")),
                             SlackHandle = reader.GetString(reader.GetOrdinal("SlackHandle")),
-                            CohortId = reader.GetInt32(reader.GetOrdinal("CohortId"))
+                            CohortId = reader.GetInt32(reader.GetOrdinal("CohortId")),
+                            CurrentCohort = new Cohort
+                            {
+                                name = reader.GetString(reader.GetOrdinal("Cohort Name"))
+                            }
                         };
 
                         students.Add(student);

@@ -25,33 +25,33 @@
                 @Html.DisplayNameFor(model => model.SlackHandle)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CohortId)
+                @Html.DisplayNameFor(model => model.CurrentCohort.name)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var student in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Id)
+                @Html.DisplayFor(modelItem => student.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
+                @Html.DisplayFor(modelItem => student.FirstName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LastName)
+                @Html.DisplayFor(modelItem => student.LastName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SlackHandle)
+                @Html.DisplayFor(modelItem => student.SlackHandle)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CohortId)
+                @Html.DisplayFor(modelItem => student.CurrentCohort.name)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.Id  }) |
-                @Html.ActionLink("Details", "Details", new {  id=item.Id  }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.Id  })
+                @Html.ActionLink("Edit", "Edit", new { id=student.Id  }) |
+                @Html.ActionLink("Details", "Details", new {  id=student.Id  }) |
+                @Html.ActionLink("Delete", "Delete", new { id=student.Id  })
             </td>
         </tr>
 }

@@ -17,6 +17,7 @@ namespace StudentExercisesMVC.Models{
         public int id {get; set;}
 
         [Required]
+        [Display(Name ="Cohort Name")]
         public string name {get; set;}
 
         // List of students in this cohort

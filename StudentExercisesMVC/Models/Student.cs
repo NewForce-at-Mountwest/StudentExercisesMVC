@@ -9,14 +9,12 @@ The collection of exercises that the student is currently working on */
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace StudentExercisesMVC.Models{
     public class Student : Person{
 
- 
-   
-
-
+        [Display(Name ="Assigned Exercises")]
         public List<Exercise> Exercises {get; set;} = new List<Exercise>();
 
     }
