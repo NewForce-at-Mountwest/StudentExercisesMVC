@@ -148,7 +148,7 @@ namespace StudentExercisesMVC.Controllers
         // POST: Students/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, Student student)
+        public ActionResult Edit(int id, EditStudentViewModel viewModel)
         {
             try
             {
@@ -163,22 +163,44 @@ namespace StudentExercisesMVC.Controllers
                                             slackHandle=@slackHandle, 
                                             cohortId=@cohortId
                                             WHERE Id = @id";
-                        cmd.Parameters.Add(new SqlParameter("@firstName", student.FirstName));
-                        cmd.Parameters.Add(new SqlParameter("@lastName", student.LastName));
-                        cmd.Parameters.Add(new SqlParameter("@slackHandle", student.SlackHandle));
-                        cmd.Parameters.Add(new SqlParameter("@cohortId", student.CohortId));
+                        cmd.Parameters.Add(new SqlParameter("@firstName", viewModel.student.FirstName));
+                        cmd.Parameters.Add(new SqlParameter("@lastName", viewModel.student.LastName));
+                        cmd.Parameters.Add(new SqlParameter("@slackHandle", viewModel.student.SlackHandle));
+                        cmd.Parameters.Add(new SqlParameter("@cohortId", viewModel.student.CohortId));
                         cmd.Parameters.Add(new SqlParameter("@id", id));
 
                         int rowsAffected = cmd.ExecuteNonQuery();
 
                     }
+
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = @"DELETE FROM StudentExercise WHERE studentId =@id";
+                        cmd.Parameters.Add(new SqlParameter("@id", id));
+                        int rowsAffected = cmd.ExecuteNonQuery();
+                    }
+
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+
+                        string command = "";
+                        viewModel.SelectedExercises.ForEach(exerciseId =>
+                        {
+                            command += $"INSERT INTO StudentExercise (studentId, exerciseId) VALUES (@id, {exerciseId})";
+
+                        });
+                        cmd.CommandText =command;
+                        cmd.Parameters.Add(new SqlParameter("@id", id));
+
+                        int rowsAffected = cmd.ExecuteNonQuery();
+                    }
                 }
 
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(Exception)
             {
-                return View(student);
+                return View(viewModel);
             }
         }
 

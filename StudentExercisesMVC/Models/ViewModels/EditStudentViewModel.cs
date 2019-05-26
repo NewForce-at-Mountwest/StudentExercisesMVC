@@ -31,6 +31,7 @@ namespace StudentExercisesMVC.Models.ViewModels
             }
         }
 
+        public EditStudentViewModel() { }
 
         public EditStudentViewModel(int studentId, string connectionString)
         {
