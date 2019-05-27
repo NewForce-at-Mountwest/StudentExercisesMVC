@@ -15,7 +15,7 @@ namespace StudentExercisesMVC.Models{
     public class Student : Person{
 
         [Display(Name ="Assigned Exercises")]
-        public List<Exercise> Exercises {get; set;} = new List<Exercise>();
+        public List<StudentExercise> Exercises {get; set;} = new List<StudentExercise>();
 
     }
 }

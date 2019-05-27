@@ -118,5 +118,15 @@ namespace StudentExercisesMVC.Controllers
                 return View();
             }
         }
+
+        // Patch /Students/Patch
+        [HttpPost]
+        
+        public ActionResult Patch(int id, [FromBody] StudentExercise studentExercise)
+        {
+
+            StudentRepository.MarkExerciseAsComplete(studentExercise);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

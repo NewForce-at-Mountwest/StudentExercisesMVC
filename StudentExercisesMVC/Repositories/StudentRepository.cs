@@ -215,5 +215,26 @@ namespace StudentExercisesMVC.Repositories
             }
 
         }
+
+        public static void MarkExerciseAsComplete(StudentExercise studentExercise)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"UPDATE StudentExercise
+                                            SET isComplete=@completed
+                                            WHERE studentId = @studentId
+                                            AND exerciseId=@exerciseId";
+                    cmd.Parameters.Add(new SqlParameter("@studentId", studentExercise.studentId));
+                    cmd.Parameters.Add(new SqlParameter("@exerciseId", studentExercise.exerciseId));
+                    cmd.Parameters.Add(new SqlParameter("@completed", studentExercise.isComplete ? 1 : 0));
+
+                    cmd.ExecuteNonQuery();
+
+                }
+            }
+        }
     }
 }

@@ -40,7 +40,7 @@ namespace StudentExercisesMVC.Models.ViewModels
                {
                    Text = singleExercise.Name,
                    Value = singleExercise.id.ToString(),
-                   Selected = student.Exercises.Find(assignedExercise => assignedExercise.id == singleExercise.id) != null
+                   Selected = student.Exercises.Find(assignedExercise => assignedExercise.Exercise.id == singleExercise.id) != null
 
                })
                .ToList();
