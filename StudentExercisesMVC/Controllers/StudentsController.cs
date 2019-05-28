@@ -73,6 +73,7 @@ namespace StudentExercisesMVC.Controllers
         // GET: Students/Details/5
         public ActionResult Details(int id)
         {
+
             using (SqlConnection conn = Connection)
             {
                 conn.Open();
@@ -95,11 +96,14 @@ namespace StudentExercisesMVC.Controllers
                             Id = reader.GetInt32(reader.GetOrdinal("Id")),
                             FirstName = reader.GetString(reader.GetOrdinal("firstName")),
                             LastName = reader.GetString(reader.GetOrdinal("lastName")),
-                            SlackHandle = reader.GetString(reader.GetOrdinal("slackHandle"))
+                            SlackHandle = reader.GetString(reader.GetOrdinal("slackHandle")),
+                            CohortId= reader.GetInt32(reader.GetOrdinal("cohortId"))
+
                         };
                     }
                     reader.Close();
 
+                    ViewData["Title"] = Student.FirstName + Student.LastName;
                     return View(Student);
                 }
             }
@@ -188,6 +192,7 @@ namespace StudentExercisesMVC.Controllers
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
                         cmd.CommandText = @"UPDATE Student
+
                                             SET firstName=@firstName, 
                                             lastName=@lastName, 
                                             slackHandle=@slackHandle, 
@@ -201,9 +206,9 @@ namespace StudentExercisesMVC.Controllers
 
                         int rowsAffected = cmd.ExecuteNonQuery();
 
+
                     }
                 }
-
                 return RedirectToAction(nameof(Index));
             }
             catch
