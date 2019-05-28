@@ -69,6 +69,7 @@ namespace StudentExercisesMVC.Controllers
         // GET: Students/Details/5
         public ActionResult Details(int id)
         {
+
             using (SqlConnection conn = Connection)
             {
                 conn.Open();
@@ -96,6 +97,7 @@ namespace StudentExercisesMVC.Controllers
                     }
                     reader.Close();
 
+                    ViewData["Title"] = Student.FirstName + Student.LastName;
                     return View(Student);
                 }
             }
@@ -168,29 +170,33 @@ namespace StudentExercisesMVC.Controllers
         {
             try
             {
+                if (ModelState.IsValid)
+                {
                     using (SqlConnection conn = Connection)
                     {
                         conn.Open();
                         using (SqlCommand cmd = conn.CreateCommand())
                         {
-                        cmd.CommandText = @"UPDATE Student
+                            cmd.CommandText = @"UPDATE Student
                                             SET firstName=@firstName, 
                                             lastName=@lastName, 
                                             slackHandle=@slackHandle, 
                                             cohortId=@cohortId
                                             WHERE Id = @id";
-                        cmd.Parameters.Add(new SqlParameter("@firstName", student.FirstName));
-                        cmd.Parameters.Add(new SqlParameter("@lastName", student.LastName));
-                        cmd.Parameters.Add(new SqlParameter("@slackHandle", student.SlackHandle));
-                        cmd.Parameters.Add(new SqlParameter("@cohortId", student.CohortId));
-                        cmd.Parameters.Add(new SqlParameter("@id", id));
+                            cmd.Parameters.Add(new SqlParameter("@firstName", student.FirstName));
+                            cmd.Parameters.Add(new SqlParameter("@lastName", student.LastName));
+                            cmd.Parameters.Add(new SqlParameter("@slackHandle", student.SlackHandle));
+                            cmd.Parameters.Add(new SqlParameter("@cohortId", student.CohortId));
+                            cmd.Parameters.Add(new SqlParameter("@id", id));
 
-                        int rowsAffected = cmd.ExecuteNonQuery();
+                            int rowsAffected = cmd.ExecuteNonQuery();
 
-                    }
-                    }
-               
+                        }
+                    } 
+
+                }
                 return RedirectToAction(nameof(Index));
+
             }
             catch
             {
@@ -251,7 +257,7 @@ namespace StudentExercisesMVC.Controllers
                         cmd.Parameters.Add(new SqlParameter("@id", id));
 
                         int rowsAffected = cmd.ExecuteNonQuery();
-                      
+
                     }
                 }
 
