@@ -112,7 +112,12 @@ namespace StudentExercisesMVC.Controllers
         // GET: Students/Create
         public ActionResult Create()
         {
+            // Create a new instance of a CreateStudentViewModel
+            // If we want to get all the cohorts, we need to use the constructor that's expecting a connection string. 
+            // When we create this instance, the constructor will run and get all the cohorts.
             CreateStudentViewModel studentViewModel = new CreateStudentViewModel(_config.GetConnectionString("DefaultConnection"));
+
+            // Once we've created it, we can pass it to the view
             return View(studentViewModel);
         }
 
