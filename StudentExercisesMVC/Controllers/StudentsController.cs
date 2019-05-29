@@ -261,6 +261,19 @@ namespace StudentExercisesMVC.Controllers
         {
             try
             {
+
+                using (SqlConnection conn = Connection)
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandText = @"DELETE FROM StudentExercise WHERE studentId = @id";
+                        cmd.Parameters.Add(new SqlParameter("@id", id));
+
+                        int rowsAffected = cmd.ExecuteNonQuery();
+
+                    }
+                }
                 using (SqlConnection conn = Connection)
                 {
                     conn.Open();
