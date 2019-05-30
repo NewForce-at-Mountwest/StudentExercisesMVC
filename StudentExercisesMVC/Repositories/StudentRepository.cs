@@ -135,7 +135,7 @@ namespace StudentExercisesMVC.Repositories
                     cmd.Parameters.Add(new SqlParameter("@cohortId", model.student.CohortId));
                     cmd.ExecuteNonQuery();
 
-                    
+
                 }
             }
 
@@ -148,43 +148,75 @@ namespace StudentExercisesMVC.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"UPDATE Student
+                    // Update the student's basic info
+                    string command = @"UPDATE Student
                                             SET firstName=@firstName, 
                                             lastName=@lastName, 
                                             slackHandle=@slackHandle, 
                                             cohortId=@cohortId
                                             WHERE Id = @id";
+
+
+                    
+                    // Get all the currently assigned exercises
+                    List<StudentExercise> previouslyAssignedExercises = ExerciseRepository.GetAssignedExercisesByStudent(id);
+
+                    // Loop through  selectedExercises
+                    viewModel.SelectedExercises.ForEach(exerciseId =>
+                    {
+                        // Check to see if each exercise in selectedExercises was already assigned
+                        // If not, add it
+                        if (!previouslyAssignedExercises.Any(studentExercise => studentExercise.exerciseId == exerciseId))
+                        {
+                            command += $" INSERT INTO StudentExercise (studentId, exerciseId, isComplete) VALUES (@id, {exerciseId}, 0)";
+
+                        }
+                    });
+
+                    // Loop through previously assigned exercises and check if they're still assigned. If not, delete them
+                    previouslyAssignedExercises.ForEach(studentExercise =>
+                    {
+                        if(!viewModel.SelectedExercises.Any(exerciseId => exerciseId == studentExercise.exerciseId))
+                        {
+                            command += $" DELETE FROM StudentExercise WHERE studentId=@id AND exerciseId={studentExercise.exerciseId}";
+                        }
+
+                    });
+
+                    cmd.CommandText = command;
                     cmd.Parameters.Add(new SqlParameter("@firstName", viewModel.student.FirstName));
                     cmd.Parameters.Add(new SqlParameter("@lastName", viewModel.student.LastName));
                     cmd.Parameters.Add(new SqlParameter("@slackHandle", viewModel.student.SlackHandle));
                     cmd.Parameters.Add(new SqlParameter("@cohortId", viewModel.student.CohortId));
                     cmd.Parameters.Add(new SqlParameter("@id", id));
-
                     int rowsAffected = cmd.ExecuteNonQuery();
 
                 }
+                
+                
+           
 
-                using (SqlCommand cmd = conn.CreateCommand())
-                {
-                    cmd.CommandText = @"DELETE FROM StudentExercise WHERE studentId =@id";
-                    cmd.Parameters.Add(new SqlParameter("@id", id));
-                    int rowsAffected = cmd.ExecuteNonQuery();
-                }
+                //using (SqlCommand cmd = conn.CreateCommand())
+                //{
+                //    cmd.CommandText = @"DELETE FROM StudentExercise WHERE studentId =@id";
+                //    cmd.Parameters.Add(new SqlParameter("@id", id));
+                //    int rowsAffected = cmd.ExecuteNonQuery();
+                //}
 
-                using (SqlCommand cmd = conn.CreateCommand())
-                {
+                //using (SqlCommand cmd = conn.CreateCommand())
+                //{
 
-                    string command = "";
-                    viewModel.SelectedExercises.ForEach(exerciseId =>
-                    {
-                        command += $"INSERT INTO StudentExercise (studentId, exerciseId) VALUES (@id, {exerciseId})";
+                //    string command = "";
+                //    viewModel.SelectedExercises.ForEach(exerciseId =>
+                //    {
+                //        command += $"INSERT INTO StudentExercise (studentId, exerciseId) VALUES (@id, {exerciseId})";
 
-                    });
-                    cmd.CommandText = command;
-                    cmd.Parameters.Add(new SqlParameter("@id", id));
+                //    });
+                //    cmd.CommandText = command;
+                //    cmd.Parameters.Add(new SqlParameter("@id", id));
 
-                    int rowsAffected = cmd.ExecuteNonQuery();
-                }
+                //    int rowsAffected = cmd.ExecuteNonQuery();
+                //}
             }
 
 

@@ -119,10 +119,10 @@ namespace StudentExercisesMVC.Controllers
             }
         }
 
-        // Patch /Students/Patch
-        [HttpPost]
+        // PATCH /Students/CompleteExercise
+        [HttpPatch]
         
-        public ActionResult Patch(int id, [FromBody] StudentExercise studentExercise)
+        public ActionResult CompleteExercise(int id, [FromBody] StudentExercise studentExercise)
         {
 
             StudentRepository.MarkExerciseAsComplete(studentExercise);
