@@ -21,13 +21,13 @@ namespace StudentExercisesMVC.Controllers
 
         public StudentsController(IConfiguration config)
         {
-            
+
             StudentRepository.SetConfig(config);
             ExerciseRepository.SetConfig(config);
             CohortRepository.SetConfig(config);
         }
 
-        
+
         // GET: Students
         public ActionResult Index()
         {

@@ -1,44 +1,41 @@
 ﻿@model StudentExercisesMVC.Models.Student
 
-@{
-    ViewData["Title"] = "Details";
-}
 
-<h1>Details</h1>
+
+<h1>@ViewData["Title"]</h1>
 
 <div>
     <h4>Student</h4>
     <hr />
-    <dl class="row">
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Id)
-        </dd>
-        <dt class="col-sm-2">
+    <div class="row">
+        <h5 class="col-sm-3">
             @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-        <dd class="col-sm-10">
+        </h5>
+        <p class="col-sm-3">
             @Html.DisplayFor(model => model.FirstName)
-        </dd>
-        <dt class="col-sm-2">
+        </p>
+        <h5 class="col-sm-3">
             @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd class="col-sm-10">
+        </h5>
+        <p class="col-sm-3">
             @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt class="col-sm-2">
+        </p>
+        <h5 class="col-sm-3">
             @Html.DisplayNameFor(model => model.SlackHandle)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.SlackHandle)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CurrentCohort.name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CurrentCohort.name)
-        </dd>
+        </h5>
 
-    </dl>
+        <p class="col-sm-3">
+            @Html.DisplayFor(model => model.SlackHandle)
+        </p>
+        <h5 class="col-sm-3">
+            @Html.DisplayNameFor(model => model.CurrentCohort.name)
+        </h5>
+        <p class="col-sm-3">
+            @Html.DisplayFor(model => model.CurrentCohort.name)
+        </p>
+
+
+    </div>
     <h5>Assigned Exercises</h5>
     @foreach (Exercise exercise in Model.Exercises)
     {
