@@ -39,7 +39,8 @@ namespace StudentExercisesMVC.Repositories
                             s.Id, s.firstName, s.lastName, s.slackHandle, s.cohortId,
                             c.Name AS 'Cohort Name'
                         FROM Student s
-                        JOIN Cohort c ON s.CohortId = c.Id";
+                        JOIN Cohort c ON s.CohortId = c.Id
+                        ORDER BY s.lastName, s.firstName";
                     SqlDataReader reader = cmd.ExecuteReader();
 
                     List<Student> students = new List<Student>();
