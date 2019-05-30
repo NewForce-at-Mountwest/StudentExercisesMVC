@@ -148,12 +148,20 @@ namespace StudentExercisesMVC.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"UPDATE Student
+                    string command = @"UPDATE Student
                                             SET firstName=@firstName, 
                                             lastName=@lastName, 
                                             slackHandle=@slackHandle, 
                                             cohortId=@cohortId
-                                            WHERE Id = @id";
+                                            WHERE Id = @id
+                                            DELETE FROM StudentExercise WHERE studentId =@id";
+
+                    viewModel.SelectedExercises.ForEach(exerciseId =>
+                    {
+                        command += $" INSERT INTO StudentExercise (studentId, exerciseId) VALUES (@id, {exerciseId})";
+
+                    });
+                    cmd.CommandText = command;
                     cmd.Parameters.Add(new SqlParameter("@firstName", viewModel.student.FirstName));
                     cmd.Parameters.Add(new SqlParameter("@lastName", viewModel.student.LastName));
                     cmd.Parameters.Add(new SqlParameter("@slackHandle", viewModel.student.SlackHandle));
@@ -163,30 +171,8 @@ namespace StudentExercisesMVC.Repositories
                     int rowsAffected = cmd.ExecuteNonQuery();
 
                 }
-
-                using (SqlCommand cmd = conn.CreateCommand())
-                {
-                    cmd.CommandText = @"DELETE FROM StudentExercise WHERE studentId =@id";
-                    cmd.Parameters.Add(new SqlParameter("@id", id));
-                    int rowsAffected = cmd.ExecuteNonQuery();
-                }
-
-                using (SqlCommand cmd = conn.CreateCommand())
-                {
-
-                    string command = "";
-                    viewModel.SelectedExercises.ForEach(exerciseId =>
-                    {
-                        command += $"INSERT INTO StudentExercise (studentId, exerciseId) VALUES (@id, {exerciseId})";
-
-                    });
-                    cmd.CommandText = command;
-                    cmd.Parameters.Add(new SqlParameter("@id", id));
-
-                    int rowsAffected = cmd.ExecuteNonQuery();
-                }
+                
             }
-
 
         }
 
