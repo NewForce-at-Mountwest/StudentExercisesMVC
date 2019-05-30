@@ -18,5 +18,7 @@ namespace StudentExercisesMVC.Models
         public bool isComplete { get; set; }
 
         public Exercise Exercise { get; set; }
+
+        public Student Student { get; set; }
     }
 }
