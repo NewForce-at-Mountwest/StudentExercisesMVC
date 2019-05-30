@@ -157,15 +157,16 @@ namespace StudentExercisesMVC.Repositories
                                             WHERE Id = @id";
 
 
-                    
-                    // Get all the currently assigned exercises
+
+                    // Get all the exercises that WERE assigned to the student before we edited
                     List<StudentExercise> previouslyAssignedExercises = ExerciseRepository.GetAssignedExercisesByStudent(id);
 
-                    // Loop through  selectedExercises
+                    // Loop through the exercises that we just assigned 
                     viewModel.SelectedExercises.ForEach(exerciseId =>
                     {
-                        // Check to see if each exercise in selectedExercises was already assigned
-                        // If not, add it
+                        // Was the exercise already assigned? 
+                        // If so, do nothing-- we want to leave it alone so we can hold onto its completion status
+                        // If not, create a new StudentExercise entry in the DB
                         if (!previouslyAssignedExercises.Any(studentExercise => studentExercise.exerciseId == exerciseId))
                         {
                             command += $" INSERT INTO StudentExercise (studentId, exerciseId, isComplete) VALUES (@id, {exerciseId}, 0)";
@@ -173,10 +174,10 @@ namespace StudentExercisesMVC.Repositories
                         }
                     });
 
-                    // Loop through previously assigned exercises and check if they're still assigned. If not, delete them
+                    // Loop through previously assigned exercises and check if they're still assigned. If not, delete them.
                     previouslyAssignedExercises.ForEach(studentExercise =>
                     {
-                        if(!viewModel.SelectedExercises.Any(exerciseId => exerciseId == studentExercise.exerciseId))
+                        if (!viewModel.SelectedExercises.Any(exerciseId => exerciseId == studentExercise.exerciseId))
                         {
                             command += $" DELETE FROM StudentExercise WHERE studentId=@id AND exerciseId={studentExercise.exerciseId}";
                         }
@@ -192,31 +193,7 @@ namespace StudentExercisesMVC.Repositories
                     int rowsAffected = cmd.ExecuteNonQuery();
 
                 }
-                
-                
-           
 
-                //using (SqlCommand cmd = conn.CreateCommand())
-                //{
-                //    cmd.CommandText = @"DELETE FROM StudentExercise WHERE studentId =@id";
-                //    cmd.Parameters.Add(new SqlParameter("@id", id));
-                //    int rowsAffected = cmd.ExecuteNonQuery();
-                //}
-
-                //using (SqlCommand cmd = conn.CreateCommand())
-                //{
-
-                //    string command = "";
-                //    viewModel.SelectedExercises.ForEach(exerciseId =>
-                //    {
-                //        command += $"INSERT INTO StudentExercise (studentId, exerciseId) VALUES (@id, {exerciseId})";
-
-                //    });
-                //    cmd.CommandText = command;
-                //    cmd.Parameters.Add(new SqlParameter("@id", id));
-
-                //    int rowsAffected = cmd.ExecuteNonQuery();
-                //}
             }
 
 
