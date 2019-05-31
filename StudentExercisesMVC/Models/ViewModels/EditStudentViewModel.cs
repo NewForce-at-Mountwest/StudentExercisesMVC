@@ -45,6 +45,7 @@ namespace StudentExercisesMVC.Models.ViewModels
                })
                .ToList();
 
+           
             Cohorts = CohortRepository.GetAllCohorts()
                .Select(cohort => new SelectListItem()
                {
