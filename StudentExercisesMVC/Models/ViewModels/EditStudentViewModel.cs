@@ -21,14 +21,14 @@ namespace StudentExercisesMVC.Models.ViewModels
 
         public Student student { get; set; }
 
-      
+
 
         public EditStudentViewModel() { }
 
         public EditStudentViewModel(int studentId)
         {
-            
-            student =StudentRepository.GetOneStudent(studentId);
+
+            student = StudentRepository.GetOneStudent(studentId);
 
             // Get the exercises that are currently assigned to this student
             // The student model already has a list for this! 
@@ -55,7 +55,7 @@ namespace StudentExercisesMVC.Models.ViewModels
                })
                .ToList();
 
-        }  
+        }
 
     }
 }
