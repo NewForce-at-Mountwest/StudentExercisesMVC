@@ -12,6 +12,18 @@ namespace StudentExercisesMVC.Models.ViewModels
     public class EditStudentViewModel
     {
 
+        // ---- What does the user need to see? -- //
+        // All the info about a student
+        // --> Get student info from DB and store it in student property
+        // All the exercises
+        // --> Get all exercises from DB and store in list of select list items
+        // Which exercises are assigned
+        // --> Get assigned exercises from db and store them on student property (student.Exercises)
+        // All the cohorts
+        // --> Get all cohorts from DB and store in list of select list items
+        // Which cohort is assigned
+        // --> We can do this when we get the student out of the DB
+
 
         [Display(Name = "Exercises")]
         public List<SelectListItem> allExercises { get; set; } = new List<SelectListItem>();
