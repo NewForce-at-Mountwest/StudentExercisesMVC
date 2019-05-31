@@ -29,10 +29,6 @@ namespace StudentExercisesMVC.Models.ViewModels
 
             numberOfStudentsCompleted = assignedStudents.Where(s => s.isComplete == true).Count();
 
-            
-
-
-
             try
             {
                 percentageOfStudentsCompleted = ((double)numberOfStudentsCompleted / (double)assignedStudents.Count()) * 100;
